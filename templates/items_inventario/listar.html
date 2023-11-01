@@ -1,0 +1,102 @@
+{% extends 'base/body.html' %}
+{% load static %}
+{% block title %}
+    Lista de Items de Inventario
+{% endblock %}
+{% block content %}
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="d-flex justify-content-between ">
+            <h1 class="h3 "><strong>Lista de</strong> Items de Inventario</h1>
+            <a class="btn btn-success" href="{% url 'crear_items_inventario' %}"><strong>Nuevo Item de Inventario</strong></a>
+        </div>
+
+        <div class="row mt-3">
+            <div class="card flex-fill">
+                <div class="card-header">
+
+                    <h5 class="card-title mb-0">Filtros</h5>
+                    <form method="get" class=" row g-3">
+                        {% for field in items_inventario_filter.form %}
+                            <div class="col-4">
+                                <label for="{{ field.html_name }}" class="form-label">{{ field.label_tag }}</label>
+                                <div>{{ field }}</div>
+                            </div>
+
+                        {% endfor %}
+                        <div>
+                            <button type="submit" class="btn btn-primary col-auto">Filtrar</button>
+                        </div>
+
+
+                    </form>
+
+                </div>
+                <div class="card p-3">
+
+
+                    <table class="table table-hover my-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nro Item</th>
+                                <th scope="col">Inventario</th>
+                                <th scope="col">Artículo</th>
+                                <th scope="col">Stock Físico</th>
+                                <th scope="col">Devoluciones Pendientes</th>
+                                <th scope="col">Total Unidades Stock</th>
+                                <th scope="col">Precio Costo</th>
+                                <th scope="col">Total Item</th>
+                                <th scope="col">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items_paginados %}
+                                <tr>
+                                    <td>{{ item.nro_item }}</td>
+                                    <td>{{ item.inventario.nro_inventario }}</td>
+                                    <td>{{ item.articulo.descripcion }}</td>
+                                    <td>{{ item.stock_fisico }}</td>
+                                    <td>{{ item.devoluciones_pendientes }}</td>
+                                    <td>{{ item.total_unidades_stock }}</td>
+                                    <td>{{ item.precio_costo }}</td>
+                                    <td>{{ item.total_item }}</td>
+                                    <td>
+                                        <a href="{% url 'editar_items_inventario' id=item.id %}"
+                                            class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="{% url 'eliminar_items_inventario' id=item.id %}"
+                                            class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="pagination mt-4">
+                        <span class="step-links">
+                            {% if items_paginados.has_previous %}
+                                <a href="?page=1" class="btn btn-primary">&laquo; primera</a>
+                                <a href="?page={{ items_paginados.previous_page_number }}"
+                                    class="btn btn-primary">anterior</a>
+                            {% endif %}
+
+                            <span class="current">
+                                Página {{ items_paginados.number }} de {{ items_paginados.paginator.num_pages }}.
+                            </span>
+
+                            {% if items_paginados.has_next %}
+                                <a href="?page={{ items_paginados.next_page_number }}"
+                                    class="btn btn-primary">siguiente</a>
+                                <a href="?page={{ items_paginados.paginator.num_pages }}"
+                                    class="btn btn-primary">última &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% endblock %}

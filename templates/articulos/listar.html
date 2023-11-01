@@ -1,0 +1,97 @@
+{% extends 'base/body.html' %}
+{% load static %}
+{% block title %}
+    Lista de Artículos
+{% endblock %}
+{% block content %}
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="d-flex justify-content-between ">
+            <h1 class="h3 "><strong>Lista de</strong> Artículos</h1>
+            <a class="btn btn-success" href="{% url 'crear_articulo' %}"><strong>Nuevo Artículo</strong></a>
+        </div>
+
+        <div class="row mt-3">
+            <div class="card flex-fill">
+                <div class="card-header">
+
+                    <h5 class="card-title mb-0">Filtros</h5>
+                    <form method="get" class="row g-3">
+                        {% for field in articulo_filter.form %}
+                            <div class="col-4">
+                                <label for="{{ field.html_name }}" class="form-label">{{ field.label_tag }}</label>
+                                <div>{{ field }}</div>
+                            </div>
+                        {% endfor %}
+                        <div>
+                            <button type="submit" class="btn btn-primary col-auto">Filtrar</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="card p-3">
+
+                    <table class="table table-hover my-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Código SKU</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Unidad de Medida</th>
+                                <th scope="col">Grupo Código</th>
+                                <th scope="col">Línea Descripción</th>
+                                <th scope="col">Sublínea Descripción</th>
+                                <th scope="col">Empresa Razón Social</th>
+                                <th scope="col">Factor Compra</th>
+                                <th scope="col">Factor Reparto</th>
+                                <th scope="col">Marca</th>
+                                <th scope="col">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for articulo in articulos_paginados %}
+                                <tr>
+                                    <td>{{ articulo.codigo_sku }}</td>
+                                    <td>{{ articulo.descripcion }}</td>
+                                    <td>{{ articulo.unidad_medida.unidad_nombre }}</td>
+                                    <td>{{ articulo.grupo.codigo_grupo }}</td>
+                                    <td>{{ articulo.linea.linea_descripcion }}</td>
+                                    <td>{{ articulo.sublinea.sublinea_descripcion }}</td>
+                                    <td>{{ articulo.empresa.razon_social }}</td>
+                                    <td>{{ articulo.factor_compra }}</td>
+                                    <td>{{ articulo.factor_reparto }}</td>
+                                    <td>{{ articulo.marca.marca_nombre }}</td>
+                                    <td>
+                                        <a href="{% url 'editar_articulo' id=articulo.id %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="{% url 'eliminar_articulo' id=articulo.id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="pagination mt-4">
+                        <span class="step-links">
+                            {% if articulos_paginados.has_previous %}
+                                <a href="?page=1" class="btn btn-primary">&laquo; primera</a>
+                                <a href="?page={{ articulos_paginados.previous_page_number }}" class="btn btn-primary">anterior</a>
+                            {% endif %}
+
+                            <span class="current">
+                                Página {{ articulos_paginados.number }} de {{ articulos_paginados.paginator.num_pages }}.
+                            </span>
+
+                            {% if articulos_paginados.has_next %}
+                                <a href="?page={{ articulos_paginados.next_page_number }}" class="btn btn-primary">siguiente</a>
+                                <a href="?page={{ articulos_paginados.paginator.num_pages }}" class="btn btn-primary">última &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% endblock %}

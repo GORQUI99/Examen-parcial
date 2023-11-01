@@ -1,0 +1,96 @@
+
+{% extends 'base/body.html' %}
+{% load static %}
+{% block title %}
+    Lista Sucursal
+{% endblock %}
+{% block content %}
+<main class="content">
+	<div class="container-fluid p-0">
+
+		
+		
+		<div class="d-flex justify-content-between ">
+			<h1 class="h3 "><strong>Lista</strong> Sucursal</h1>
+			<a class="btn btn-success" href="{% url 'crear_sucursal' %}"><strong>Nueva Sucursal</strong></a>
+		</div>
+		
+		<div class="row mt-3">
+				<div class="card flex-fill">
+					<div class="card-header">
+
+						<h5 class="card-title mb-0">Filtros</h5>
+						<form method="get" class=" row g-3">
+							{% for field in sucursal_filter.form %}
+								<div class="col-4">
+									<label for="{{ field.html_name }}" class="form-label">{{ field.label_tag }}</label>
+									<div >{{ field }}</div>
+								</div>
+								
+							{% endfor %}
+							<div>
+								<button type="submit" class="btn btn-primary col-auto">Filtrar</button>
+							</div>
+							
+							
+						</form>
+
+					</div>
+					<div class="card p-3">
+
+					
+						<table class="table table-hover my-0">
+							<thead>
+								<tr>
+									<!-- <th scope="col">ID Sucursal</th>
+									<th scope="col">ID Empresa</th> -->
+									<th scope="col">Número de Documento</th>
+									<th scope="col">Razón Social</th>
+									<th scope="col">Nombre Comercial Sucursal</th>
+									<th scope="col">Dirección Sucursal</th>
+									<th scope="col">Opciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for sucursal in sucursales_paginadas %}
+									<tr>
+										<!-- <td>{{ sucursal.sucursal_id }}</td>
+										<td>{{ sucursal.empresa_id.empresa_id }}</td> -->
+										<td>{{ sucursal.empresa.nro_documento }}</td>
+										<td>{{ sucursal.empresa.razon_social }}</td>
+										<td>{{ sucursal.nombre_comercial }}</td>
+										<td>{{ sucursal.direccion }}</td>
+										<td>
+											<a href="{% url 'editar_sucursal' id=sucursal.id %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
+											<a href="{% url 'eliminar_sucursal' id=sucursal.id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						
+					<div class="pagination mt-4">
+						<span class="step-links">
+							{% if sucursales_paginadas.has_previous %}
+								<a href="?page=1" class="btn btn-primary">&laquo; primera</a>
+								<a href="?page={{ sucursales_paginadas.previous_page_number }}" class="btn btn-primary">anterior</a>
+							{% endif %}
+				
+							<span class="current">
+								Página {{ sucursales_paginadas.number }} de {{ sucursales_paginadas.paginator.num_pages }}.
+							</span>
+				
+							{% if sucursales_paginadas.has_next %}
+								<a href="?page={{ sucursales_paginadas.next_page_number }}" class="btn btn-primary">siguiente</a>
+								<a href="?page={{ sucursales_paginadas.paginator.num_pages }}" class="btn btn-primary">última &raquo;</a>
+							{% endif %}
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base/body.html' %}
+{% load static %}
+{% block title %}
+    Crear nuevo inventario
+{% endblock %}
+{% block content %}
+<main class="content">
+	<div class="container-fluid p-0">
+
+		<div class="d-flex justify-content-between ">
+			<h1 class="h3 "><strong>Formulario de nuevo</strong> inventario</h1>
+			<a class="btn btn-success" href="{% url 'listar_inventarios' %}"><strong>Lista de inventarios</strong></a>
+		</div>
+
+		<div class="row mt-3">
+			<div class="card flex-fill">
+				<div class="card-header">
+
+					<form method="post">
+						{% csrf_token %}
+						<div class="row">
+							{% for field in form %}
+								<div class="col-6">
+									<label for="{{ field.html_name }}" class="form-label">{{ field.label_tag }}</label>
+									{{ field }}
+								</div>
+							{% endfor %}
+						</div>
+						<button type="submit" class="btn btn-primary mt-3">Guardar</button>
+					</form>
+					
+				</div>
+			</div>
+		</div>
+
+	</div>
+</main>
+{% endblock %}
